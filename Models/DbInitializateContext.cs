@@ -1,95 +1,22 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Cwieczenie11.Models
 {
-    public class DoctorsDbContext : DbContext 
+    public class DbInitializateContext : DbContext
     {
-        public DbSet<Doctor> Doctors { get; set; }
-
-        public DoctorsDbContext() 
+        public DbInitializateContext() 
         { }
 
-        public DoctorsDbContext(DbContextOptions<DoctorsDbContext> options)
-        : base (options)
-        {
-        
-        
-        }
+        public DbInitializateContext(DbContextOptions<DbInitializateContext> options) 
+        : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) 
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<Doctor>((builder) =>
-            {
-                builder.HasKey(e => e.IdDoctor); // Определяет это поле как уникальное
-                builder.Property(e => e.IdDoctor).ValueGeneratedOnAdd(); // Автоматическое генерация нового уникального значения в поле IdDoctor при вставлении нового элемента
-                builder.Property(e => e.FirstName).HasMaxLength(100);
-                builder.Property(e => e.LastName).HasMaxLength(100);
-                builder.Property(e => e.Email).HasMaxLength(100);
-
-  // /*
-                builder.HasMany(a => a.Prescriptions)
-                       .WithOne(a => a.Doctor)
-                       .HasForeignKey(a => a.IdDoctor)
-                       .IsRequired();
-        
-                // */
-            }
-            );
-            modelBuilder.Entity<Prescription>((builder) =>
-            {
-                builder.HasKey(e => e.IdPrescription);
-                // builder.Property(e => e.IdDoctor);
-                /*
-                                builder.HasMany(a => a.Prescription_Medicaments)
-                                       .WithOne(a => a.Prescription)
-                                       .HasForeignKey(a => a.IdPrescription)
-                                       .IsRequired();   
-                  */
-            }
-            );
-            modelBuilder.Entity<Patient>((builder) =>
-            {
-                // /*
-                builder.HasKey(e => e.IdPatient);
-                builder.Property(e => e.FirstName)
-                       .HasMaxLength(100);
-                builder.Property(e => e.LastName)
-                       .HasMaxLength(100);
-                // */   
-                //            /*
-                builder.HasMany(a => a.Prescriptions)
-                       .WithOne(a => a.Patient)
-                       .HasForeignKey(a => a.IdPatient)
-                       .IsRequired();
-                // */
-            });
-            modelBuilder.Entity<Prescription_Medicament>((builder) =>
-            {
-                builder.HasKey(e => e.IdMedicament);
-                builder.HasKey(e => e.IdPrescription);
-                builder.Property(e => e.Dose)
-                       .IsRequired();
-                builder.Property(e => e.Details)
-                       .HasMaxLength(100);
-            }
-            );
-            modelBuilder.Entity<Medicament>((builder) =>
-            {
-                builder.HasKey(e => e.IdMedicament);
-
-                builder.HasMany(a => a.Prescription_Medicaments)
-                        .WithOne(a => a.Medicament)
-                        .HasForeignKey(a => a.IdMedicament)
-                        .IsRequired();
-            });
-
-            //____________________
-
 
             ICollection<Doctor> doctors = new List<Doctor>();
             doctors.Add(new Doctor
@@ -115,8 +42,8 @@ namespace Cwieczenie11.Models
                 Email = "gjfgre@po@ua"
             });
 
-
-            modelBuilder.Entity<Doctor>()
+            
+            modelBuilder.Entity<Doctor>()   
                         .HasData(doctors);
 
             ICollection<Patient> patients = new List<Patient>();
@@ -149,7 +76,7 @@ namespace Cwieczenie11.Models
             ICollection<Prescription> prescriptions = new List<Prescription>();
             prescriptions.Add(new Prescription
             {
-                IdPrescription = 1,
+                IdPrescription =  1, 
                 IdDoctor = 1,
                 Date = new DateTime(2000, 02, 02),
                 DueDate = new DateTime(2033, 02, 02),
@@ -183,7 +110,7 @@ namespace Cwieczenie11.Models
                 IdMedicament = 1,
                 Name = "Ibuprofen",
                 Description = "Nie prinimat",
-                Type = "LOX"
+                Type = "LOX"                
             });
 
             medicaments.Add(new Medicament
@@ -233,9 +160,6 @@ namespace Cwieczenie11.Models
 
 
 
-
         }
-
-
     }
 }

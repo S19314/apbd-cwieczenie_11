@@ -13,5 +13,7 @@ namespace Cwieczenie11.Models
         public string LastName { get; set; }
         public DateTime BirthDate { get; set; }
 
+         public ICollection<Prescription> Prescriptions { get; set; }
+
     }
 }
